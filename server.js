@@ -12,6 +12,8 @@ const request    = require( "request" );
 
 const app = express();
 
+app.use(bodyparser.urlencoded( { extended: true } ));
+
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
@@ -23,22 +25,10 @@ var Item = mongoose.model('Item', {
     comment: String
 });
 
-const item = new Item( { title: "Some title", link: "http://www.google.com", comment: "This is my comment." } );
-
-// item.save( function(err) {
-//     if ( err ) throw err;
-
-//     console.log( item );
-// })
-
-// Item.find( {}, function( err, item ) {
-//     console.log( "Found item: ", item );
-// })
-
 app.get( "/", function( req, res ) {
     Item.find({}, function( err, itemList) {
         if ( err ) throw err;
-        console.log( "itemList:", itemList );
+        //console.log( "itemList:", itemList );
         res.render( "list", {
             data: itemList
         })
@@ -54,6 +44,26 @@ app.get( "/getnews", function( req, res ) {
         res.json( { status: statusCode } ); 
     })   
 });
+
+app.post( "/addcmt", function( req, res ) {
+    console.log( "adding comment: ", req.body );
+    Item.findByIdAndUpdate( req.body.id, { $set: { comment: req.body.comment } }, function( err, results ) {
+        if (err) throw err;
+        console.log( results );
+        res.json( results );
+    })
+
+})
+
+app.post( "/delcmt", function( req, res ) {
+    console.log( "deleting comment: ", req.body );
+    Item.findByIdAndUpdate( req.body.id, { $set: { comment: null } }, function( err, results ) {
+        if (err) throw err;
+        console.log( results );
+        res.json( results );
+    })
+
+})
 
 app.listen( port, function( ) {
     console.log( "Listening on " + port );
@@ -71,7 +81,7 @@ function getNewArticles() {
             const title = $(this).children("a").text();
             if ( title ) {;
                 // console.log( title );
-                var link = $(this).children("a").attr("href");
+                const link = $(this).children("a").attr("href");
                 //console.log( link );
                 const item = new Item( { title: title, link: link } );
                 item.save( function(err) {

@@ -28,6 +28,9 @@ body {
     background-size: cover;
     min-height: 1000px;
 }
+.comment {
+    display: none;
+}
 
 #call-me-hal {
   background-color: #0d355a;
@@ -50,4 +53,35 @@ body {
   </div>
 
 </body>
+<script type="text/javascript" defered>
+
+    const news = {};
+
+    news.addCmt = function( id ) {
+        const txtId = "txt-" + id;
+        console.log( txtId );
+
+        const cmtText = document.getElementById(txtId).value;
+        console.log( cmtText );
+
+        $.ajax( {
+            url: "/addcmt",
+            method: "POST",
+            data: {
+                id: id,
+                comment: cmtText
+            }
+        })
+        .done( function( result ) {
+            console.log( result );
+            console.log( "Comment posted" );
+        })
+    }
+
+    news.delCmt = function( id ) {
+        const txtId = "cmt-" + id;
+        console.log( txtId );
+    }
+
+</script>
 </html>
