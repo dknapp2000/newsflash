@@ -47,22 +47,30 @@ app.get( "/getnews", function( req, res ) {
 
 app.post( "/addcmt", function( req, res ) {
     console.log( "adding comment: ", req.body );
-    Item.findByIdAndUpdate( req.body.id, { $set: { comment: req.body.comment } }, function( err, results ) {
-        if (err) throw err;
-        console.log( results );
-        res.json( results );
+    const id = req.body.id;
+    const comment = req.body.comment;
+    console.log( "COMMENT: ", comment );
+    
+    Item.findById( id, function( err, item ) {
+        item.comment = comment;
+        item.save( function(err) {
+            if ( err ) throw err;
+            res.json( item );            
+        })
     })
 
 })
 
 app.post( "/delcmt", function( req, res ) {
     console.log( "deleting comment: ", req.body );
-    Item.findByIdAndUpdate( req.body.id, { $set: { comment: null } }, function( err, results ) {
-        if (err) throw err;
-        console.log( results );
-        res.json( results );
+    const id = req.body.id;
+    Item.findById( id, function( err, item ) {
+        item.comment = null;
+        item.save( function(err) {
+            if ( err ) throw err;
+            res.json( item );            
+        })
     })
-
 })
 
 app.listen( port, function( ) {

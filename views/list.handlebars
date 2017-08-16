@@ -8,7 +8,7 @@
             <button class="btn btn-info" onclick="document.getElementById('cmt-{{this._id}}').style.display='block'">Comment</button>
             <div id="cmt-{{this._id}}" class="comment" >
                 <h4>Your thoughts</h4>
-                <input type="text" id="txt-{{this._id}}" placeholder="Add your own comment" size="40" value={{this.comment}}>
+                <input type="text" id="txt-{{this._id}}" placeholder="Add your own comment" size="40" value="{{this.comment}}">
                 <div>
                     <button id="save-{{this._id}}" class="btn btn-success" onclick="news.addCmt('{{this._id}}')">Save comment</button>
                     <button id="del-{{this._id}}" class="btn btn-danger" onclick="news.delCmt('{{this._id}}')">Remove comment</button>

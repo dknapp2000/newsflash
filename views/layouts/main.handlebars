@@ -79,8 +79,24 @@ body {
     }
 
     news.delCmt = function( id ) {
-        const txtId = "cmt-" + id;
+        const txtId = "txt-" + id;
         console.log( txtId );
+
+        const cmtText = document.getElementById(txtId).value;
+        console.log( cmtText );
+
+        $.ajax( {
+            url: "/delcmt",
+            method: "POST",
+            data: {
+                id: id
+            }
+        })
+        .done( function( result ) {
+            console.log( result );
+            console.log( "Comment deleted" );
+            document.getElementById(txtId).value = "";
+        })
     }
 
 </script>
